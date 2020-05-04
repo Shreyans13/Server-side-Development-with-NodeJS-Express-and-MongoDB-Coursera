@@ -12,7 +12,8 @@ dishRouter.use(bodyParser.json())
 	next()
 })
 
-dishRouter.route('/(:dishId)?')
+dishRouter.route('/')
+
 .get((req, res, next) => {
 	if(req.params.dishId){
 		res.end("Will send the details of the dish: " + req.params.dishId + " to you!!")
@@ -46,11 +47,4 @@ dishRouter.route('/(:dishId)?')
 	res.end("Deletig all the dishes")
 });
 
-
-
-
-// dishRouter.route('/:dishId')
 module.exports = dishRouter
-
-
-// 	res.end("Deletig dish: " + req.params.dishId)
