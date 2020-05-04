@@ -58,8 +58,6 @@ app.delete('/dishes/:dishId', (req, res, next) => {
 	res.end("Deletig dish: " + req.params.dishId)
 })
 
-
-
 app.use((req,res,next) =>{
 	console.log(req.headers);
 	res.statusCode = 200;
