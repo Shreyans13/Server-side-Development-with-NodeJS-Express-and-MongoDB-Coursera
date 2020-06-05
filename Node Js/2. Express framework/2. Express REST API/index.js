@@ -30,7 +30,7 @@ app.post('/dishes', (req, res, next) => {
 
 app.put('/dishes', (req, res, next) => {
 	res.statusCode = 403
-	res.end('PUT operation bot supported on dishes')
+	res.end('PUT operation not supported on dishes')
 })
 
 app.delete('/dishes', (req, res, next) => {
@@ -46,7 +46,7 @@ app.get('/dishes/:dishId',(req, res, next) => {
 
 app.post('/dishes/:dishId', (req, res, next) => {
 	res.statusCode = 403
-	res.end('POST operation bot supported on /dishes/' + req.params.dishId)
+	res.end('POST operation not supported on /dishes/' + req.params.dishId)
 })
 
 app.put('/dishes/:dishId', (req, res, next) => {

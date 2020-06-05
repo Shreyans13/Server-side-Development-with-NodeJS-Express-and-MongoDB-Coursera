@@ -24,7 +24,7 @@ dishRouter.route('/')
 .post((req, res, next) => {
 	if(req.params.dishId){
 		res.statusCode = 403
-		res.end('POST operation bot supported on /dishes/' + req.params.dishId)
+		res.end('POST operation not supported on /dishes/' + req.params.dishId)
 		return
 	}
 	res.end('Will add the dish ' + req.body.name + 
