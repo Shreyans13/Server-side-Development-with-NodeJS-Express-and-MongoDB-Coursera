@@ -1,5 +1,8 @@
 const express = require('express')
 const bodyParser = require('body-parser')
+const mongoose = require('mongoose');
+
+const Dishes = require('../models/dishes')
 
 const dishRouter = express.Router()
 
@@ -7,18 +10,24 @@ dishRouter.use(bodyParser.json())
 
 dishRouter.route('/(:dishId)?')
 
-.all((req, res, next) => {
-	res.statusCode = 200
-	res.setHeader('Content-Type', 'text/plain')
-	next()
-})
-
 .get((req, res, next) => {
 	if(req.params.dishId){
-		res.end("Will send the details of the dish: " + req.params.dishId + " to you!!")
-		return
+		Dishes.findById(req.params.dishId)
+		.then((dish) => {
+			res.statusCode = 200;
+			res.setHeader('Content-Type', 'application/json');
+			res.json(dish);
+		}, (err) => next(err))
+		.catch((err) => next(err))
+		return;
 	}
-	res.end("Will send all the dishes to you!!")
+	Dishes.find({})
+	.then((dishes) => {
+		res.statusCode = 200;
+		res.setHeader('Content-Type', 'application/json');
+		res.json(dishes);
+	}, (err) => next(err))
+	.catch((err) => next(err))
 })
 .post((req, res, next) => {
 	if(req.params.dishId){
@@ -26,13 +35,27 @@ dishRouter.route('/(:dishId)?')
 		res.end('POST operation not supported on /dishes/' + req.params.dishId)
 		return
 	}
-	res.end('Will add the dish ' + req.body.name + 
-			' with details: ' + req.body.description)
+	Dishes.create(req.body)
+	.then((dish) => {
+		console.log('Dish Crated', dish);
+		res.statusCode = 200;
+		res.setHeader('Content-Type', 'application/json');
+		res.json(dish);
+	}, (err) => next(err))
+	.catch((err) => next(err))
 })
 .put((req, res, next) => {
 	if(req.params.dishId){
-		res.write('Updating their dish: ' + req.params.dishId)
-		res.end('\nWill update their dish: ' + req.body.name + " with details " + req.body.description )
+		Dishes.findByIdAndUpdate(req.params.dishId, {
+				$set: req.body
+			}, { new: true })
+			.then((dish) => {
+				console.log('Dish Crated', dish);
+				res.statusCode = 200;
+				res.setHeader('Content-Type', 'application/json');
+				res.json(dish);
+			}, (err) => next(err))
+			.catch((err) => next(err))
 		return
 	}
 	res.statusCode = 403
@@ -40,10 +63,22 @@ dishRouter.route('/(:dishId)?')
 })
 .delete((req, res, next) => {
 	if(req.params.dishId){
-		res.end("Deletig dish: " + req.params.dishId)
+		Dishes.findByIdAndRemove(req.params.dishId)
+		.then((resp) => {
+			res.statusCode = 200;
+			res.setHeader('Content-Type', 'application/json');
+			res.json(resp);
+		}, (err) => next(err))
+		.catch((err) => next(err));
 		return
 	}
-	res.end("Deletig all the dishes")
+	Dishes.remove({})
+	.then((resp) => {
+		res.statusCode = 200;
+		res.setHeader('Content-Type', 'application/json');
+		res.json(resp);
+	}, (err) => next(err))
+	.catch((err) => next(err));
 });
 
 
