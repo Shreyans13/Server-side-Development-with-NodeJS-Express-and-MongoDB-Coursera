@@ -44,42 +44,27 @@ app.use(session({
 	store: new FileStore()
 }));
 
+app.use('/', indexRouter);
+app.use('/users', usersRouter);
+
 let auth = (req, res, next) => {
 	console.log(req.session);
-	let authHeader = req.headers.authorization;
-	if (!req.session.user) {
-		if (!authHeader) {
-			let err = new Error('You are not authenticated')
-			res.setHeader('WWW-Authenticate', 'Basic')
-			err.status = 401;
-			return next(err);
+
+	if(!req.session.user) {
+		var err = new Error('You are not authenticated!');
+		err.status = 403;
+		return next(err);
+	}
+	else {
+		if (req.session.user === 'authenticated') {
+			next();
 		}
-		console.log(authHeader)
-		let auth = new Buffer.from(authHeader.split(' ')[1], 'base64').toString().split(':');
-
-		let username = auth[0];
-		let password = auth[1];
-
-		if (username === 'admin' && password === 'password'){
-			req.session.user = 'admin'
-			next()
-		} else {
-			let err = new Error('You are not authenticated')
-			res.setHeader('WWW-Authenticate', 'Basic')
-			err.status = 401;
-			return next(err);
-		}
-	} else {
-		if (req.session.user === 'admin') {
-			next()
-		} else {
-			let err = new Error('You are not authenticated')
-
-			err.status = 401;
+		else {
+			var err = new Error('You are not authenticated!');
+			err.status = 403;
 			return next(err);
 		}
 	}
-	
 }
 app.use(auth);
 
