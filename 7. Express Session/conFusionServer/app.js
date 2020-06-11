@@ -3,8 +3,8 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-var session = require('express-session')
-var FileStore = require('session-file-store')(session)
+var session = require('express-session');
+var FileStore = require('session-file-store')(session);
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -42,11 +42,11 @@ app.use(session({
 	saveUninitialized: false,
 	resave: false,
 	store: new FileStore()
-}))
+}));
 
 let auth = (req, res, next) => {
-	console.log(req.session)
-	let authHeader = req.headers.authorization
+	console.log(req.session);
+	let authHeader = req.headers.authorization;
 	if (!req.session.user) {
 		if (!authHeader) {
 			let err = new Error('You are not authenticated')
