@@ -12,7 +12,7 @@
     "express-session": "^1.17.1",
     "http-errors": "~1.6.3",
     "jade": "~1.11.0",
-    "jsonwebtoken": "^8.5.1",
+    "jsonwebtoken": "^9.0.0",
     "mongodb": "^3.5.8",
     "mongoose": "^5.9.18",
     "mongoose-currency": "^0.2.0",
